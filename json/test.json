@@ -1,0 +1,10 @@
+[
+    {
+      "bot_id": 1,
+      "type": "new",
+      "baseOrder": 20,
+      "orderType": "market",
+      "limitOrderTargetPrice": 0.98,
+      "dealCondition":true
+    }
+  ]
