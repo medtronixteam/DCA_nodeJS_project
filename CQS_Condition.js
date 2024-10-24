@@ -1,11 +1,14 @@
 require("dotenv").config();
 const ccxt = require("ccxt");
 
-const { saveTransaction, saveBalance,getExchangeKey }=require("./transactionHandler");
-let API_Key = '';
-let API_Secret = '';
+const {
+  saveTransaction,
+  saveBalance,
+  getExchangeKey,
+} = require("./transactionHandler");
 
-
+let API_Key = "";
+let API_Secret = "";
 
 // User Balance
 let userBalance = {
@@ -14,9 +17,13 @@ let userBalance = {
   btcPurchasePrice: 0,
 };
 
-// Control flags to prevent multiple transaction saves
+// Control flags to manage transaction flow
+let isBuyCycle = true; // Start with buy cycle
 let buyTransactionSaved = false;
 let sellTransactionSaved = false;
+
+// Initialize the futureExchange variable
+let futureExchange = null;
 
 // Fetch current BTC/USDT price from Binance Futures
 async function getCurrentBtcPrice() {
@@ -97,6 +104,7 @@ async function buyBtc(bot_uid) {
 
       buyTransactionSaved = true; // Mark transaction as saved
       console.log("Buy transaction saved.");
+      isBuyCycle = false; // Switch to sell cycle after buying
     }
   } catch (error) {
     console.error(`Error placing buy order for bot_uid: ${bot_uid}`, error);
@@ -157,6 +165,7 @@ async function sellBtcIfProfitable(bot_uid) {
 
           sellTransactionSaved = true; // Mark transaction as saved
           console.log("Sell transaction saved.");
+          isBuyCycle = true; // Switch back to buy cycle after selling
         }
       } catch (error) {
         console.error(
@@ -177,28 +186,29 @@ async function sellBtcIfProfitable(bot_uid) {
 }
 
 // Main CQS Condition function to handle buy-sell cycle
-async function CQS_Condition(bot_uid,user_id,exchange) {
+async function CQS_Condition(bot_uid, user_id, exchange) {
   // get user exchange keys
-const credentials = await getExchangeKey(user_id, exchange); 
-if (credentials) {
-   API_Key = credentials.API_Key;
-   API_Secret = credentials.API_Secret;
-  console.log('Using API Key:', API_Key);
-  console.log('Using API Secret:', API_Secret);
-}
-const futureExchange = new ccxt.binance({
-apiKey: API_Key,
-secret: API_Secret,
-options: {
-  defaultType: "future", // Futures trading
-},
-urls: {
-  api: {
-    public: "https://testnet.binancefuture.com/fapi/v1",
-    private: "https://testnet.binancefuture.com/fapi/v1",
-  },
-},
-});
+  const credentials = await getExchangeKey(user_id, exchange);
+  if (credentials) {
+    API_Key = credentials.API_Key;
+    API_Secret = credentials.API_Secret;
+    console.log("Using API Key:", API_Key);
+    console.log("Using API Secret:", API_Secret);
+  }
+
+  futureExchange = new ccxt.binance({
+    apiKey: API_Key,
+    secret: API_Secret,
+    options: {
+      defaultType: "future", // Futures trading
+    },
+    urls: {
+      api: {
+        public: "https://testnet.binancefuture.com/fapi/v1",
+        private: "https://testnet.binancefuture.com/fapi/v1",
+      },
+    },
+  });
   await futureExchange.setSandboxMode(true); // Enable sandbox mode for testing
 
   // Fetch and display user balance (for logging)
@@ -208,24 +218,22 @@ urls: {
     bot_uid,
     balance.info.availableBalance
   );
-  saveBalance(exchange,'USDT',balance.USDT.free,user_id);
+  saveBalance(exchange, "USDT", balance.USDT.free, user_id);
   console.log("Free USDT for bot_uid: ", bot_uid, balance.USDT.free);
 
-  // Start by buying BTC with the initial balance
-  if (userBalance.usd > 0) {
-   // await buyBtc(bot_uid); // Start by buying BTC if USD is available
-  }
-
-  // Regularly check if BTC can be sold
-  // setInterval(async () => {
-  //   if (userBalance.btc > 0) {
-  //     await sellBtcIfProfitable(bot_uid); // Check if it's time to sell BTC
-  //   } else {
-  //     console.log(
-  //       `No BTC to sell for bot_uid: ${bot_uid}, waiting for the next buy opportunity.`
-  //     );
-  //   }
-  // }, 60000); // Check every minute
+  // checking buy/sell cycle
+  setInterval(async () => {
+    if (isBuyCycle && userBalance.usd > 0) {
+      await buyBtc(bot_uid);
+      console.log("User is buying BTC for bot_uid: ", bot_uid);
+    } else if (!isBuyCycle) {
+      await sellBtcIfProfitable(bot_uid);
+    } else {
+      console.log(
+        `No available action for bot_uid: ${bot_uid}, waiting for next opportunity.`
+      );
+    }
+  }, 10000); // Check every 10 seconds
 }
 
 module.exports = CQS_Condition;

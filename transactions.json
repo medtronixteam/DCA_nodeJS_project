@@ -1,142 +1,102 @@
 [
   {
-    "bot_uid": "54321",
+    "bot_uid": "12345",
     "credit": 0,
     "debit": 300,
-    "buying_price": 67039.5,
+    "buying_price": 66555.5,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.299Z"
+    "timestamp": "2024-10-24T04:44:49.932Z"
   },
   {
-    "bot_uid": "54321",
+    "bot_uid": "12345",
+    "credit": 0.004507516283402574,
+    "debit": 0,
+    "buying_price": 66555.5,
+    "selling_price": 0,
+    "profit": 0,
+    "status": "buy",
+    "timestamp": "2024-10-24T04:44:49.979Z"
+  },
+  {
+    "bot_uid": "12345",
     "credit": 0,
     "debit": 300,
-    "buying_price": 67059.1,
+    "buying_price": 66850,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.408Z"
+    "timestamp": "2024-10-24T04:50:16.592Z"
   },
   {
-    "bot_uid": "54321",
-    "credit": 0.004474973709529456,
+    "bot_uid": "12345",
+    "credit": 0.004487658937920718,
     "debit": 0,
-    "buying_price": 67039.5,
+    "buying_price": 66850,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.418Z"
+    "timestamp": "2024-10-24T04:50:16.694Z"
   },
   {
-    "bot_uid": "54321",
-    "credit": 0.004473665766465699,
-    "debit": 0,
-    "buying_price": 67059.1,
-    "selling_price": 0,
-    "profit": 0,
-    "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.458Z"
-  },
-  {
-    "bot_uid": "54321",
+    "bot_uid": "12345",
     "credit": 0,
     "debit": 300,
-    "buying_price": 67039.5,
+    "buying_price": 66826,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.935Z"
+    "timestamp": "2024-10-24T04:53:48.704Z"
   },
   {
-    "bot_uid": "54321",
-    "credit": 0.004474973709529456,
+    "bot_uid": "12345",
+    "credit": 0.004489270643162841,
     "debit": 0,
-    "buying_price": 67039.5,
+    "buying_price": 66826,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:30.954Z"
+    "timestamp": "2024-10-24T04:53:48.767Z"
   },
   {
-    "bot_uid": "54321",
+    "bot_uid": "12345",
     "credit": 0,
     "debit": 300,
-    "buying_price": 67039.5,
+    "buying_price": 67033.4,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:31.021Z"
+    "timestamp": "2024-10-24T04:54:58.600Z"
   },
   {
-    "bot_uid": "54321",
-    "credit": 0.004474973709529456,
+    "bot_uid": "12345",
+    "credit": 0.004475380929506783,
     "debit": 0,
-    "buying_price": 67039.5,
+    "buying_price": 67033.4,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:31.046Z"
+    "timestamp": "2024-10-24T04:54:58.623Z"
   },
   {
-    "bot_uid": "54321",
+    "bot_uid": "12345",
     "credit": 0,
     "debit": 300,
-    "buying_price": 67039.5,
+    "buying_price": 67153.4,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:31.157Z"
+    "timestamp": "2024-10-24T04:57:36.586Z"
   },
   {
-    "bot_uid": "54321",
-    "credit": 0.004474973709529456,
+    "bot_uid": "12345",
+    "credit": 0.004467383632102024,
     "debit": 0,
-    "buying_price": 67039.5,
+    "buying_price": 67153.4,
     "selling_price": 0,
     "profit": 0,
     "status": "buy",
-    "timestamp": "2024-10-23T06:35:31.177Z"
-  },
-  {
-    "bot_uid": "54321",
-    "credit": 0,
-    "debit": 300,
-    "buying_price": 67242,
-    "selling_price": 0,
-    "profit": 0,
-    "status": "buy",
-    "timestamp": "2024-10-23T06:39:49.000Z"
-  },
-  {
-    "bot_uid": "54321",
-    "credit": 0.00446149727848666,
-    "debit": 0,
-    "buying_price": 67242,
-    "selling_price": 0,
-    "profit": 0,
-    "status": "buy",
-    "timestamp": "2024-10-23T06:39:49.013Z"
-  },
-  {
-    "bot_uid": "a28f2783-6f39-4c59-a8f5-bcfa2206602b",
-    "credit": 0,
-    "debit": 300.00000000000006,
-    "buying_price": 66909.4,
-    "selling_price": 0,
-    "profit": 0,
-    "status": "buy",
-    "timestamp": "2024-10-23T10:26:50.909Z"
-  },
-  {
-    "bot_uid": "a28f2783-6f39-4c59-a8f5-bcfa2206602b",
-    "credit": 0.004483674939545117,
-    "debit": 0,
-    "buying_price": 66909.4,
-    "selling_price": 0,
-    "profit": 0,
-    "status": "buy",
-    "timestamp": "2024-10-23T10:26:50.918Z"
+    "timestamp": "2024-10-24T04:57:36.609Z"
   }
 ]
