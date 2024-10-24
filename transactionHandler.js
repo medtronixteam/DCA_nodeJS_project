@@ -66,4 +66,52 @@ async function saveTransaction(
   }
 }
 
-module.exports = saveTransaction;
+async function saveBalance(exchange,currency,balance,user_id){
+
+  try {
+    const query = `
+      INSERT INTO balances (exchange, currency, balance,user_id,created_at,updated_at)
+      VALUES (?, ?, ?,?,NOW(),NOW())
+      ON DUPLICATE KEY UPDATE balance = VALUES(balance);
+    `;
+
+    await db.execute(query, [exchange, currency, balance,user_id]);
+    console.log('Balance  Updated');
+  } catch (error) {
+    console.error('Mysql Error in balance Query----->:', error);
+  }
+}
+async function getExchangeKey(userId,exchangeName){
+  try {
+
+    const query = `
+      SELECT exchange_api_key, exchange_api_secret 
+      FROM exchanges 
+      WHERE user_id = ? AND exchange_name = ?
+      LIMIT 1;
+    `;
+
+    const [rows] = await db.execute(query, [userId, exchangeName]);
+
+    if (rows.length > 0) {
+      const API_Key = rows[0].exchange_api_key;
+      const API_Secret = rows[0].exchange_api_secret;
+      return { API_Key, API_Secret };
+    } else {
+      console.log(`No API credentials found for user_id: ${userId}, exchange_name: ${exchangeName}`);
+      return null;
+    }
+  } catch (error) {
+    console.log(`No API credentials found for user_id: ${userId}, exchange_name: ${exchangeName} ${error}`);
+   
+    return null;
+  }
+
+}
+
+
+module.exports = {
+  saveTransaction,
+  saveBalance,
+  getExchangeKey
+};

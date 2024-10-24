@@ -118,5 +118,25 @@
     "profit": 0,
     "status": "buy",
     "timestamp": "2024-10-23T06:39:49.013Z"
+  },
+  {
+    "bot_uid": "a28f2783-6f39-4c59-a8f5-bcfa2206602b",
+    "credit": 0,
+    "debit": 300.00000000000006,
+    "buying_price": 66909.4,
+    "selling_price": 0,
+    "profit": 0,
+    "status": "buy",
+    "timestamp": "2024-10-23T10:26:50.909Z"
+  },
+  {
+    "bot_uid": "a28f2783-6f39-4c59-a8f5-bcfa2206602b",
+    "credit": 0.004483674939545117,
+    "debit": 0,
+    "buying_price": 66909.4,
+    "selling_price": 0,
+    "profit": 0,
+    "status": "buy",
+    "timestamp": "2024-10-23T10:26:50.918Z"
   }
 ]

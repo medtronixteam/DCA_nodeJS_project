@@ -19,7 +19,7 @@ const readJSONFile = () => {
 // Fetch all bots from the database
 const fetchAllBots = async () => {
   try {
-    const [rows] = await db.query("SELECT bot_uid, status FROM bots");
+    const [rows] = await db.execute("SELECT bot_uid, status,user_id FROM bots ",[]);
     return rows; // Return all bots with their UID and status
   } catch (error) {
     console.error("Error fetching bots:", error);
@@ -49,30 +49,31 @@ socket.on("message", async (data) => {
   const currentPrice = parseFloat(tradeData.p);
 //   console.log(`Current BTC price from WebSocket: $${currentPrice}`);
 
-  let newTradeData = readJSONFile();
+//  let newTradeData = readJSONFile();
 
-  // If we have new data in the JSON file
-  if (newTradeData.length > 0) {
-    const bots = await fetchAllBots(); // Fetch all bots with their UID and status
+  
+});
 
-    // Loop through each bot and check if status is 'starting'
-    for (const bot of bots) {
-      if (bot.status === "starting") {
-        console.log(`Bot with UID: ${bot.bot_uid} is now running.`);
+setInterval(async ()=>{
+  const bots = await fetchAllBots(); // Fetch all bots with their UID and status
 
-        // Call CQS_Condition and pass the bot_uid
-        await CQS_Condition(bot.bot_uid);
+  // Loop through each bot and check if status is 'starting'
+  for (const bot of bots) {
+    if (bot.status === "pending") {
+      console.log(`Bot with UID: ${bot.bot_name} is now running.`);
 
-        // Update bot status to 'running' so it won't run again
-        await updateBotStatus(bot.bot_uid, "running");
-      } else if (bot.status === "running") {
-        // console.log(
-        //   `Bot with UID: ${bot.bot_uid} is already running and will not be executed again.`
-        // );
-      }
+      // Call CQS_Condition and pass the bot_uid
+      await CQS_Condition(bot.bot_uid,bot.user_id,'binance');
+
+      // Update bot status to 'running' so it won't run again
+      await updateBotStatus(bot.bot_uid, "running");
+    } else if (bot.status === "running") {
+      // console.log(
+      //   `Bot with UID: ${bot.bot_uid} is already running and will not be executed again.`
+      // );
     }
   }
-});
+},1000);
 
 socket.on("error", (error) => {
   console.error("WebSocket error:", error);

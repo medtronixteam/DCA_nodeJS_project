@@ -1,22 +1,11 @@
 require("dotenv").config();
 const ccxt = require("ccxt");
-const saveTransaction = require("./transactionHandler"); // Import transaction handler
-const API_Key = process.env.API_Key;
-const API_Secret = process.env.API_Secret;
 
-const futureExchange = new ccxt.binance({
-  apiKey: API_Key,
-  secret: API_Secret,
-  options: {
-    defaultType: "future", // Futures trading
-  },
-  urls: {
-    api: {
-      public: "https://testnet.binancefuture.com/fapi/v1",
-      private: "https://testnet.binancefuture.com/fapi/v1",
-    },
-  },
-});
+const { saveTransaction, saveBalance,getExchangeKey }=require("./transactionHandler");
+let API_Key = '';
+let API_Secret = '';
+
+
 
 // User Balance
 let userBalance = {
@@ -188,7 +177,28 @@ async function sellBtcIfProfitable(bot_uid) {
 }
 
 // Main CQS Condition function to handle buy-sell cycle
-async function CQS_Condition(bot_uid) {
+async function CQS_Condition(bot_uid,user_id,exchange) {
+  // get user exchange keys
+const credentials = await getExchangeKey(user_id, exchange); 
+if (credentials) {
+   API_Key = credentials.API_Key;
+   API_Secret = credentials.API_Secret;
+  console.log('Using API Key:', API_Key);
+  console.log('Using API Secret:', API_Secret);
+}
+const futureExchange = new ccxt.binance({
+apiKey: API_Key,
+secret: API_Secret,
+options: {
+  defaultType: "future", // Futures trading
+},
+urls: {
+  api: {
+    public: "https://testnet.binancefuture.com/fapi/v1",
+    private: "https://testnet.binancefuture.com/fapi/v1",
+  },
+},
+});
   await futureExchange.setSandboxMode(true); // Enable sandbox mode for testing
 
   // Fetch and display user balance (for logging)
@@ -198,23 +208,24 @@ async function CQS_Condition(bot_uid) {
     bot_uid,
     balance.info.availableBalance
   );
+  saveBalance(exchange,'USDT',balance.USDT.free,user_id);
   console.log("Free USDT for bot_uid: ", bot_uid, balance.USDT.free);
 
   // Start by buying BTC with the initial balance
   if (userBalance.usd > 0) {
-    await buyBtc(bot_uid); // Start by buying BTC if USD is available
+   // await buyBtc(bot_uid); // Start by buying BTC if USD is available
   }
 
   // Regularly check if BTC can be sold
-  setInterval(async () => {
-    if (userBalance.btc > 0) {
-      await sellBtcIfProfitable(bot_uid); // Check if it's time to sell BTC
-    } else {
-      console.log(
-        `No BTC to sell for bot_uid: ${bot_uid}, waiting for the next buy opportunity.`
-      );
-    }
-  }, 60000); // Check every minute
+  // setInterval(async () => {
+  //   if (userBalance.btc > 0) {
+  //     await sellBtcIfProfitable(bot_uid); // Check if it's time to sell BTC
+  //   } else {
+  //     console.log(
+  //       `No BTC to sell for bot_uid: ${bot_uid}, waiting for the next buy opportunity.`
+  //     );
+  //   }
+  // }, 60000); // Check every minute
 }
 
 module.exports = CQS_Condition;
